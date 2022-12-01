@@ -2,11 +2,11 @@ import mysql.connector
 import os
 import math
 import time
+from flask import Flask
 from geopy import distance
 from dotenv import load_dotenv
 
 load_dotenv()
-
 connection = mysql.connector.connect(
     host='127.0.0.1',
     port=3306,
@@ -15,6 +15,8 @@ connection = mysql.connector.connect(
     password=os.environ['db_password'],
     autocommit=False
 )
+cursor = connection.cursor()
+app = Flask(__name__)
 
 airports = []
 flight_compare = ""
@@ -43,7 +45,6 @@ def generate_random_location():
           "FROM airport, country WHERE NOT type='closed' " \
           "and airport.iso_country = country.iso_country" \
           " ORDER BY RAND() LIMIT 1;"
-    cursor = connection.cursor()
     cursor.execute(sql)
     result = cursor.fetchall()
 
