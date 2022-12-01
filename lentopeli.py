@@ -18,9 +18,9 @@ connection = mysql.connector.connect(
 cursor = connection.cursor()
 app = Flask(__name__)
 
+curr = None
+dest = None
 airports = []
-flight_compare = ""
-temp_dest = ""
 turns_total = 0
 km_total = 0
 dist_by_type = {
@@ -31,8 +31,6 @@ dist_by_type = {
     "large_airport": 1000,
     "seaplane_base": 100
 }
-curr = ""
-dest = ""
 
 @app.route("/")
 def init():
@@ -45,6 +43,10 @@ def init():
         dest = generate_random_location()
         dist = get_distance(curr["lat"], curr["long"], dest["lat"], dest["long"])
     return render_template('index.html')
+
+@app.route("/dest")
+def send_destination():
+    return 
 
 def generate_random_location():
     sql = "SELECT ident, airport.name as airport_name," \

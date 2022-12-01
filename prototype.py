@@ -1,6 +1,4 @@
 airports = []
-flight_compare = ""
-temp_dest = ""
 turns_total = 0
 km_total = 0
 dist_by_type = {
