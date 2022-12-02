@@ -16,6 +16,13 @@ async function main() {
 
     console.log('Current data:');
     console.dir(currentData);
+
+    let {'current': curr,
+        'airports': airports,
+        'distance': dist,
+        'turn': turn,
+        'total_km': totalKm,
+        'total_co2': totalCO2} = currentData;
 }
 
 main();
