@@ -3,10 +3,11 @@ import os
 import math
 import time
 import json
-from flask import Flask, render_template
+from flask import Flask, send_file
 from geopy import distance
 from dotenv import load_dotenv
 
+# CONFIGS
 load_dotenv()
 connection = mysql.connector.connect(
     host='127.0.0.1',
@@ -19,6 +20,7 @@ connection = mysql.connector.connect(
 cursor = connection.cursor()
 app = Flask(__name__)
 
+# VARIABLES
 curr = None
 dest = None
 airports = []
@@ -33,6 +35,7 @@ dist_by_type = {
     "seaplane_base": 100
 }
 
+# ROUTES
 @app.route("/")
 def init():
     global curr, dest
@@ -43,13 +46,14 @@ def init():
     while dest == curr or (dist > 4000 or dist < 1500):
         dest = generate_random_location()
         dist = get_distance(curr.lat, curr.long, dest.lat, dest.long)
-    return render_template('index.html')
+    return send_file('static/index.html')
 
 
 @app.route("/dest")
 def send_destination():
     return json.dumps(curr.__dict__)
 
+# FUNCTIONS
 def generate_random_location():
     sql = "SELECT ident, airport.name as airport_name," \
           "country.name as country_name, type, latitude_deg, longitude_deg " \
@@ -62,7 +66,6 @@ def generate_random_location():
     airport = Airport(result[0][0], result[0][1], result[0][2],
                       result[0][3], result[0][4], result[0][5])
     return airport
-
 
 def tuple_to_dict(tuple):
     ident, airport_name, country_name, type, lat, long = tuple
@@ -81,7 +84,7 @@ def get_distance(curr_lat, curr_long, dest_lat, dest_long):
                                         [dest_lat, dest_long]).km
     return distance_result
 
-
+# CLASSES
 class Airport:
 
     def __init__(self, ident, airport_name, country_name, type, lat, long):
@@ -95,5 +98,3 @@ class Airport:
 
 if __name__ == '__main__':
     app.run(use_reloader=True, host='127.0.0.1', port=3000)
-
-connection.close()
