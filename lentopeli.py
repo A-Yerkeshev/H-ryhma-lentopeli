@@ -1,8 +1,4 @@
-import mysql.connector
-import os
-import math
-import time
-import json
+import mysql.connector, os, math, time, json, jsonpickle
 from flask import Flask, send_file
 from geopy import distance
 from dotenv import load_dotenv
@@ -23,9 +19,12 @@ app = Flask(__name__)
 # VARIABLES
 curr = None
 dest = None
+dist = None
 airports = []
+currdata = None
 turns_total = 0
 km_total = 0
+co2_total = 0
 dist_by_type = {
     "balloonport": 50,
     "heliport": 100,
@@ -38,7 +37,7 @@ dist_by_type = {
 # ROUTES
 @app.route("/")
 def init():
-    global curr, dest
+    global curr, dest, dist
     curr = generate_random_location()
     dest = generate_random_location()
     dist = get_distance(curr.lat, curr.long, dest.lat, dest.long)
@@ -52,6 +51,14 @@ def init():
 @app.route("/dest")
 def send_destination():
     return json.dumps(curr.__dict__)
+
+
+@app.route("/current")
+def send_current():
+    global currdata, curr, airports, dist, turn, km_total, co2_total
+    currdata = {'current': curr, 'airports': airports, 'dist': dist,
+                'turn': turns_total, 'total_km': km_total, 'total_co2': co2_total}
+    return jsonpickle.encode(currdata)
 
 # FUNCTIONS
 def generate_random_location():
