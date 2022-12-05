@@ -1,0 +1,73 @@
+/* Settings */
+* { 
+	box-sizing: border-box;
+}
+html, body {
+	min-height: 100%;
+	background: #fff;
+	color: #000;
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+}
+	
+body {
+	text-rendering: optimizeLegibility;
+}
+	
+ul, ol, dl {
+	margin: 0;
+}
+
+article, aside, audio, 
+footer, header, nav, section, video {
+	display: block; 
+}
+	
+h1 {
+	font-size: 1.3rem;
+}
+h2 {
+	font-size: 1.2rem;
+}
+h3 {
+	font-size: 1.1rem;
+}
+	
+p { 
+	-ms-word-break: break-all;
+	word-break: break-all;
+	word-break: break-word;
+	-moz-hyphens: auto;
+	-webkit-hyphens: auto;
+	-ms-hyphens: auto;
+	hyphens: auto;
+} 
+	
+textarea { 
+	resize: vertical;
+}
+ 
+table { border-collapse: collapse; }
+td {
+	padding: 0.5rem;
+}
+	
+img { 
+	border: none;
+	max-width: 100%;
+}
+	
+input:required:after {
+	color: #f00;
+	content: " *";
+}
+input[type="email"]:invalid { 
+	background: #f00;
+}
+	
+sub, sup { 
+	line-height: 0;
+}
+
+/* Header */
