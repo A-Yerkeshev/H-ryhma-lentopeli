@@ -50,7 +50,7 @@ def init():
 
 @app.route("/dest")
 def send_destination():
-    return json.dumps(curr.__dict__)
+    return json.dumps(dest.__dict__)
 
 
 @app.route("/current")

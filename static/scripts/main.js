@@ -1,5 +1,11 @@
 "use strict";
 
+const currTag = document.getElementById('curr');
+const destTag = document.getElementById('dest');
+const turnTag = document.getElementById('turn');
+const totalKmTag = document.getElementById('total-km');
+const totalCO2Tag = document.getElementById('total-co2');
+
 async function main() {
     // Fetch final destination
     const dest = await fetchTimes('dest', 3, 'destination');
@@ -9,6 +15,8 @@ async function main() {
     console.log('Destination:');
     console.dir(dest);
 
+    destTag.innerText = `Destination is ${dest['airport_name']}`;
+
     // Fetch starting location, list of available airports, distance to destination,
     // current turn num, total km travelled and total co2 emissed
     const currentData = await fetchTimes('current', 3, 'current data');
@@ -17,12 +25,9 @@ async function main() {
     console.log('Current data:');
     console.dir(currentData);
 
-    let {'current': curr,
-        'airports': airports,
-        'distance': dist,
-        'turn': turn,
-        'total_km': totalKm,
-        'total_co2': totalCO2} = currentData;
+    let {'current': curr, airports, dist, turn, 'total_km': totalKm,'total_co2': totalCO2} = currentData;
+
+    updateHeader(curr['airport_name'], turn, totalKm, totalCO2);
 }
 
 main();
@@ -50,4 +55,11 @@ async function fetchTimes(url, times=1, resource) {
     }
 
     return res;
+}
+
+function updateHeader(currName, turn, totalKm, totalCO2) {
+    currTag.innerText = `Currently at ${currName}`;
+    turnTag.innerText = `Turn: ${turn}`;
+    totalKmTag.innerText = `Total km travelled: ${totalKm}`;
+    totalCO2Tag.innerText = `Total CO2 emitted: ${totalCO2}`;
 }
