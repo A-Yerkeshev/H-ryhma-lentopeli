@@ -1,22 +1,34 @@
 /* Settings */
+:root {
+    --sandy-light: #fceacf;
+    --sandy-medium: #e2c08d;
+    --sandy-dark: #8b662e;
+    --black: #211300;
+    --white: #fffbf1;
+}
+
 * { 
 	box-sizing: border-box;
 }
+
 html, body {
 	min-height: 100%;
-	background: #fff;
-	color: #000;
-    font-size: 14px;
+	background: var(--sandy-medium);
+	color: var(--black);
+    font-size: 15px;
     margin: 0;
     padding: 0;
 }
 	
 body {
 	text-rendering: optimizeLegibility;
+    padding: 1rem;
 }
 	
 ul, ol, dl {
 	margin: 0;
+    list-style: none;
+    padding: 0;
 }
 
 article, aside, audio, 
@@ -24,6 +36,11 @@ footer, header, nav, section, video {
 	display: block; 
 }
 	
+h1, h2, h3, h4 {
+    margin: 0;
+    font-weight: normal;
+}
+
 h1 {
 	font-size: 1.3rem;
 }
@@ -71,3 +88,37 @@ sub, sup {
 }
 
 /* Header */
+header {
+    background-color: var(--white);
+    padding: 0.5rem;
+    overflow: auto;
+    border-bottom: 1rem solid var(--sandy-dark);
+}
+
+.curr-info {
+    display: block;
+    float: right;
+    clear: both;
+    font-weight: 600;
+}
+
+/* Main */
+main {
+    background-color: var(--sandy-light);
+    padding: 0.5rem;
+    display: flex;
+    gap: 1rem;
+}
+
+/* Airports list */
+#airports {
+    background-color: var(--white);
+    flex-grow: 1;
+}
+
+#airports li {
+    display: flex;
+    gap: 0.4rem;
+    border-bottom: 1px solid var(--black);
+    padding: 0.2rem 0.6rem 0;
+}

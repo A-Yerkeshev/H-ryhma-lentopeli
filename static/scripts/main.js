@@ -1,7 +1,9 @@
 "use strict";
 
-const currTag = document.getElementById('curr');
-const destTag = document.getElementById('dest');
+const currNameTag = document.getElementById('curr-name');
+const currCountryTag = document.getElementById('curr-country');
+const destNameTag = document.getElementById('dest-name');
+const destCountryTag = document.getElementById('dest-country');
 const turnTag = document.getElementById('turn');
 const totalKmTag = document.getElementById('total-km');
 const totalCO2Tag = document.getElementById('total-co2');
@@ -16,7 +18,8 @@ async function main() {
     console.log('Destination:');
     console.dir(dest);
 
-    destTag.innerText = `Destination is ${dest['airport_name']} in ${dest['country_name']}`;
+    destNameTag.innerText = dest['airport_name'];
+    destCountryTag.innerText = dest['country_name'];
 
     // Fetch starting location, list of available airports, distance to destination,
     // current turn num, total km travelled and total co2 emissed
@@ -28,7 +31,7 @@ async function main() {
 
     let {'current': curr, airports, dist, turn, 'total_km': totalKm,'total_co2': totalCO2} = currentData;
 
-    updateHeader(curr['airport_name'], curr['country_name'], turn, totalKm, totalCO2);
+    updateHeader(curr, turn, totalKm, totalCO2);
     updateAirportsList(airports);
 }
 
@@ -59,8 +62,9 @@ async function fetchTimes(url, times=1, resource) {
     return res;
 }
 
-function updateHeader(curr, country, turn, totalKm, totalCO2) {
-    currTag.innerText = `Currently at ${curr} in ${country}`;
+function updateHeader(curr, turn, totalKm, totalCO2) {
+    currNameTag.innerText = curr['airport_name'];
+    currCountryTag.innerText = curr['country_name'];
     turnTag.innerText = `Turn: ${turn}`;
     totalKmTag.innerText = `Total km travelled: ${totalKm}`;
     totalCO2Tag.innerText = `Total CO2 emitted: ${totalCO2}`;
@@ -72,7 +76,22 @@ function updateAirportsList(airports) {
 
     Array.from(airports).forEach((airport) => {
         const li = document.createElement('li');
-        li.innerText = airport['airport_name'];
+        const name = document.createElement('span');
+        const country = document.createElement('span');
+        const direction = document.createElement('span');
+        const type = document.createElement('span');
+
+        name.classList.add('airport-name');
+        country.classList.add('airport-country');
+        direction.classList.add('airport-direction');
+        type.classList.add('airport-type');
+
+        name.innerText = airport['airport_name'];
+        country.innerText = airport['country_name'];
+        direction.innerText = airport['direction'];
+        type.innerText = airport['type'].split('_').join(' ');
+
+        li.append(name, country, direction, type);
         frag.append(li);
     });
 

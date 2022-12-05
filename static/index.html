@@ -11,13 +11,14 @@
   </head>
   <body>
     <header>
-      <h1 id="curr"></h1>
-      <h2 id="dest"></h2>
-      <span id="turn"></span>
-      <span id="total-km"></span>
-      <span id="total-co2"></span>
+      <h1>Currently at <b id="curr-name"></b> in <b id="curr-country"></b></h1>
+      <h2>Destination is <b id="dest-name"></b> in <b id="dest-country"></b></h2>
+      <span id="turn" class="curr-info"></span>
+      <span id="total-km" class="curr-info"></span>
+      <span id="total-co2" class="curr-info"></span>
     </header>
     <main>
+      <iframe title="map-placeholder" width="500" height="500"></iframe>
       <ul id="airports"></ul>
     </main>
   </body>
