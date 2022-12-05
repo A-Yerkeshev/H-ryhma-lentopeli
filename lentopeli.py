@@ -56,6 +56,10 @@ def send_destination():
 @app.route("/current")
 def send_current():
     global currdata, curr, airports, dist, turn, km_total, co2_total
+
+    airports.clear()
+    airports = fetch_available_airports(curr.lat, curr.long, curr.type)
+
     currdata = {'current': curr, 'airports': airports, 'dist': dist,
                 'turn': turns_total, 'total_km': km_total, 'total_co2': co2_total}
     return jsonpickle.encode(currdata)
@@ -90,6 +94,49 @@ def get_distance(curr_lat, curr_long, dest_lat, dest_long):
     distance_result = distance.distance([curr_lat, curr_long],
                                         [dest_lat, dest_long]).km
     return distance_result
+
+def fetch_available_airports(curr_lat, curr_long, type):
+    # Define flight radius based on airport type
+    if type in dist_by_type:
+        radius_km = dist_by_type[type]
+    else:
+        raise Exception(f"Airport type '{type}' is invalid.")
+
+    # Select all airports within the reach of current location, based on airport type
+    # Distance = 3963.0 * arccos[(sin(lat1) * sin(lat2)) + cos(lat1) * cos(lat2) * cos(long2 – long1)] * 1.609344
+    sql = f"""SELECT ident, airport.name, country.name, type, latitude_deg, longitude_deg FROM airport, country
+    WHERE 3963.0 * acos((sin(RADIANS({curr_lat})) * sin(RADIANS(latitude_deg))) +
+    cos(RADIANS({curr_lat})) * cos(RADIANS(latitude_deg)) *
+    cos(RADIANS(longitude_deg) - RADIANS({curr_long}))) * 1.609344 <= {radius_km}
+    AND type != 'closed'
+    AND ident != '{curr.ident}'
+    AND country.iso_country = airport.iso_country;"""
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    db_result = cursor.fetchall()
+
+    result = []
+    direction_names = ['North', 'North-East', 'East', 'South-East', 'South', 'South-West', 'West', 'North-West']
+
+    for entry in db_result:
+        airport = Airport(entry[0], entry[1], entry[2], entry[3], entry[4], entry[5])
+
+        # Calculate in which direction airport is located
+        x = (math.cos(math.radians(airport.lat)) *
+             math.sin(math.radians(airport.long - curr.long)))
+        y = (math.cos(math.radians(curr.lat)) *
+             math.sin(math.radians(airport.lat)) -
+             math.sin(math.radians(curr.lat)) *
+             math.cos(math.radians(airport.lat)) *
+             math.cos(math.radians(airport.long - curr.long)))
+        bearing = math.degrees(math.atan2(x, y))
+
+        i = round(((bearing + 180)/45)+4)%8
+        airport.direction = direction_names[i]
+
+        result.append(airport)
+
+    return result
 
 # CLASSES
 class Airport:

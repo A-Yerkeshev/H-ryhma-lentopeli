@@ -5,6 +5,7 @@ const destTag = document.getElementById('dest');
 const turnTag = document.getElementById('turn');
 const totalKmTag = document.getElementById('total-km');
 const totalCO2Tag = document.getElementById('total-co2');
+const airportsTag = document.getElementById('airports');
 
 async function main() {
     // Fetch final destination
@@ -28,6 +29,7 @@ async function main() {
     let {'current': curr, airports, dist, turn, 'total_km': totalKm,'total_co2': totalCO2} = currentData;
 
     updateHeader(curr['airport_name'], curr['country_name'], turn, totalKm, totalCO2);
+    updateAirportsList(airports);
 }
 
 main();
@@ -62,4 +64,17 @@ function updateHeader(curr, country, turn, totalKm, totalCO2) {
     turnTag.innerText = `Turn: ${turn}`;
     totalKmTag.innerText = `Total km travelled: ${totalKm}`;
     totalCO2Tag.innerText = `Total CO2 emitted: ${totalCO2}`;
+}
+
+function updateAirportsList(airports) {
+    airportsTag.innerHTML = '';
+    const frag = new DocumentFragment;
+
+    Array.from(airports).forEach((airport) => {
+        const li = document.createElement('li');
+        li.innerText = airport['airport_name'];
+        frag.append(li);
+    });
+
+    airportsTag.append(frag);
 }

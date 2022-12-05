@@ -42,54 +42,6 @@ def tuple_to_dict(tuple):
     }
 
 
-def fetch_available_airports(curr_lat, curr_long, type):
-    # Define flight radius based on airport type
-    if type in dist_by_type:
-        radius_km = dist_by_type[type]
-    else:
-        raise Exception(f"Airport type '{type}' is invalid.")
-
-    # Select all airports within the reach of current location, based on airport type
-    # Distance = 3963.0 * arccos[(sin(lat1) * sin(lat2)) + cos(lat1) * cos(lat2) * cos(long2 – long1)] * 1.609344
-    sql = f"""SELECT ident, airport.name, country.name, type, latitude_deg, longitude_deg FROM airport, country
-    WHERE 3963.0 * acos((sin(RADIANS({curr_lat})) * sin(RADIANS(latitude_deg))) +
-    cos(RADIANS({curr_lat})) * cos(RADIANS(latitude_deg)) *
-    cos(RADIANS(longitude_deg) - RADIANS({curr_long}))) * 1.609344 <= {radius_km}
-    AND type != 'closed'
-    AND ident != '{curr["ident"]}'
-    AND country.iso_country = airport.iso_country;"""
-    cursor = connection.cursor()
-    cursor.execute(sql)
-    result = cursor.fetchall()
-    airports.clear()
-
-    # Order airports by direction
-    direction_names = ['North', 'North-East', 'East', 'South-East', 'South', 'South-West', 'West', 'North-West']
-    direction_groups = [[], [], [], [], [], [], [], []]
-
-    for entry in result:
-        airport = tuple_to_dict(entry)
-
-        # Calculate in which direction airport is located
-        x = (math.cos(math.radians(airport['lat'])) *
-             math.sin(math.radians(airport['long'] - curr['long'])))
-        y = (math.cos(math.radians(curr['lat'])) *
-             math.sin(math.radians(airport['lat'])) -
-             math.sin(math.radians(curr['lat'])) *
-             math.cos(math.radians(airport['lat'])) *
-             math.cos(math.radians(airport['long'] - curr['long'])))
-        bearing = math.degrees(math.atan2(x, y))
-
-        i = round(((bearing + 180)/45)+4)%8
-        airport['direction'] = direction_names[i]
-        direction_groups[i].append(airport)
-
-    # Order airports by direction
-    for group in direction_groups:
-        for airport in group:
-            airports.append(airport)
-
-
 def print_available_airports():
     global dest
     for i, airport in enumerate(airports):
