@@ -134,6 +134,9 @@ def fetch_available_airports(curr_lat, curr_long, type):
         i = round(((bearing + 180)/45)+4)%8
         airport.direction = direction_names[i]
 
+        # Get distance compared to current airport
+        airport.distance = round(get_distance(curr.lat, curr.long, airport.lat, airport.long), 2)
+
         result.append(airport)
 
     return result

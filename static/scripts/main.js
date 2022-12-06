@@ -22,7 +22,7 @@ async function main() {
     destCountryTag.innerText = dest['country_name'];
 
     // Fetch starting location, list of available airports, distance to destination,
-    // current turn num, total km travelled and total co2 emissed
+    // current turn num, total km travelled and total co2 emitted
     const currentData = await fetchTimes('current', 3, 'current data');
     if (!currentData || Object.keys(currentData).length === 0) { return; }
 
@@ -49,7 +49,7 @@ function fetchFrom(url, resource) {
     return promise;
 }
 
-// Make several tries to fetch a resourse
+// Make several tries to fetch a resource
 async function fetchTimes(url, times=1, resource) {
     let res = await fetchFrom(url, resource);
     let tries = 1;
