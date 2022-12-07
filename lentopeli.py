@@ -1,4 +1,9 @@
-import mysql.connector, os, math, time, json, jsonpickle
+import mysql.connector
+import os
+import math
+import time
+import json
+import jsonpickle
 from flask import Flask, send_file
 from geopy import distance
 from dotenv import load_dotenv
@@ -34,6 +39,7 @@ dist_by_type = {
     "seaplane_base": 100
 }
 
+
 # ROUTES
 @app.route("/")
 def init():
@@ -64,6 +70,7 @@ def send_current():
                 'turn': turns_total, 'total_km': km_total, 'total_co2': co2_total}
     return jsonpickle.encode(currdata)
 
+
 # FUNCTIONS
 def generate_random_location():
     sql = "SELECT ident, airport.name as airport_name," \
@@ -78,6 +85,7 @@ def generate_random_location():
                       result[0][3], result[0][4], result[0][5])
     return airport
 
+
 def tuple_to_dict(tuple):
     ident, airport_name, country_name, type, lat, long = tuple
 
@@ -90,10 +98,12 @@ def tuple_to_dict(tuple):
         "long": long,
     }
 
+
 def get_distance(curr_lat, curr_long, dest_lat, dest_long):
     distance_result = distance.distance([curr_lat, curr_long],
                                         [dest_lat, dest_long]).km
     return distance_result
+
 
 def fetch_available_airports(curr_lat, curr_long, type):
     # Define flight radius based on airport type
@@ -131,7 +141,7 @@ def fetch_available_airports(curr_lat, curr_long, type):
              math.cos(math.radians(airport.long - curr.long)))
         bearing = math.degrees(math.atan2(x, y))
 
-        i = round(((bearing + 180)/45)+4)%8
+        i = round(((bearing + 180)/45)+4) % 8
         airport.direction = direction_names[i]
 
         # Get distance compared to current airport
@@ -140,6 +150,7 @@ def fetch_available_airports(curr_lat, curr_long, type):
         result.append(airport)
 
     return result
+
 
 # CLASSES
 class Airport:

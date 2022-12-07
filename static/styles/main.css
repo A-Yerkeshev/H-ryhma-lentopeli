@@ -114,6 +114,8 @@ main {
 #airports {
     background-color: var(--white);
     flex-grow: 1;
+    overflow-y: scroll;
+    height: 30rem;
 }
 
 #airports li {
@@ -121,4 +123,9 @@ main {
     gap: 0.4rem;
     border-bottom: 1px solid var(--black);
     padding: 0.2rem 0.6rem 0;
+}
+
+#map {
+    width: 46rem;
+    height: 30rem;
 }

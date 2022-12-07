@@ -9,6 +9,13 @@ const totalKmTag = document.getElementById('total-km');
 const totalCO2Tag = document.getElementById('total-co2');
 const airportsTag = document.getElementById('airports');
 
+const map = L.map('map').setView([0, 0], 2);
+
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+
 async function main() {
     // Fetch final destination
     const dest = await fetchTimes('dest', 3, 'destination');
@@ -33,6 +40,13 @@ async function main() {
 
     updateHeader(curr, turn, totalKm, totalCO2);
     updateAirportsList(airports);
+
+    map.panTo(([curr['lat'], curr['long']]));
+
+    const markerCurr = L.marker([curr['lat'], curr['long']]).addTo(map);
+    const markerDest = L.marker([dest['lat'], dest['long']]).addTo(map);
+    markerDest._icon.style.filter = "hue-rotate(120deg)"
+
 }
 
 main();
@@ -73,6 +87,7 @@ function updateHeader(curr, turn, totalKm, totalCO2) {
 function updateAirportsList(airports) {
     airportsTag.innerHTML = '';
     const frag = new DocumentFragment;
+    let marker;
 
     Array.from(airports).forEach((airport) => {
         const li = document.createElement('li');
@@ -91,9 +106,19 @@ function updateAirportsList(airports) {
         direction.innerText = airport['direction'];
         type.innerText = airport['type'].split('_').join(' ');
 
+        li.addEventListener('mouseover', (event) => {
+            marker = L.marker([airport['lat']], [airport['long']]).addTo(map);
+            markerDest._icon.style.filter = "hue-rotate(240deg)"
+        });
+
+        li.addEventListener('click', (event) => {
+
+        });
+
         li.append(name, country, direction, type);
         frag.append(li);
     });
 
     airportsTag.append(frag);
+
 }
