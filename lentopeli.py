@@ -116,30 +116,34 @@ def fetch_available_airports(curr_lat, curr_long, type):
     db_result = cursor.fetchall()
 
     result = []
-    direction_names = ['North', 'North-East', 'East', 'South-East', 'South', 'South-West', 'West', 'North-West']
 
+    # Create airport object from entries of db_results and add direction and distance
     for entry in db_result:
         airport = Airport(entry[0], entry[1], entry[2], entry[3], entry[4], entry[5])
-
-        # Calculate in which direction airport is located
-        x = (math.cos(math.radians(airport.lat)) *
-             math.sin(math.radians(airport.long - curr.long)))
-        y = (math.cos(math.radians(curr.lat)) *
-             math.sin(math.radians(airport.lat)) -
-             math.sin(math.radians(curr.lat)) *
-             math.cos(math.radians(airport.lat)) *
-             math.cos(math.radians(airport.long - curr.long)))
-        bearing = math.degrees(math.atan2(x, y))
-
-        i = round(((bearing + 180)/45)+4)%8
-        airport.direction = direction_names[i]
-
-        # Get distance compared to current airport
+        
+        add_direction(airport)
         airport.distance = round(get_distance(curr.lat, curr.long, airport.lat, airport.long), 2)
 
         result.append(airport)
 
     return result
+
+def add_direction(airport):
+    direction_names = ['North', 'North-East', 'East', 'South-East', 'South', 'South-West', 'West', 'North-West']
+
+    # Calculate in which direction airport is located
+    x = (math.cos(math.radians(airport.lat)) *
+            math.sin(math.radians(airport.long - curr.long)))
+    y = (math.cos(math.radians(curr.lat)) *
+            math.sin(math.radians(airport.lat)) -
+            math.sin(math.radians(curr.lat)) *
+            math.cos(math.radians(airport.lat)) *
+            math.cos(math.radians(airport.long - curr.long)))
+    bearing = math.degrees(math.atan2(x, y))
+
+    i = round(((bearing + 180)/45)+4)%8
+    airport.direction = direction_names[i]
+
 
 # CLASSES
 class Airport:
