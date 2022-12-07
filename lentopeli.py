@@ -4,6 +4,7 @@ import math
 import time
 import json
 import jsonpickle
+import requests
 from flask import Flask, send_file
 from geopy import distance
 from dotenv import load_dotenv

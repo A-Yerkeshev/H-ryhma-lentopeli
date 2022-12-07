@@ -41,12 +41,12 @@ async function main() {
     updateHeader(curr, turn, totalKm, totalCO2);
     updateAirportsList(airports);
 
+    // Zoom to current location and add markers
     map.panTo(([curr['lat'], curr['long']]));
 
     const markerCurr = L.marker([curr['lat'], curr['long']]).addTo(map);
     const markerDest = L.marker([dest['lat'], dest['long']]).addTo(map);
-    markerDest._icon.style.filter = "hue-rotate(120deg)"
-
+    markerDest._icon.style.filter = "hue-rotate(120deg)";
 }
 
 main();
@@ -87,7 +87,6 @@ function updateHeader(curr, turn, totalKm, totalCO2) {
 function updateAirportsList(airports) {
     airportsTag.innerHTML = '';
     const frag = new DocumentFragment;
-    let marker;
 
     Array.from(airports).forEach((airport) => {
         const li = document.createElement('li');
@@ -107,7 +106,7 @@ function updateAirportsList(airports) {
         type.innerText = airport['type'].split('_').join(' ');
 
         li.addEventListener('mouseover', (event) => {
-            marker = L.marker([airport['lat']], [airport['long']]).addTo(map);
+            marker = L.marker([airport['lat'], airport['long']]).addTo(map);
             markerDest._icon.style.filter = "hue-rotate(240deg)"
         });
 
