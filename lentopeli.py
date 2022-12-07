@@ -184,15 +184,17 @@ def add_co2(airports):
         'Authorization': 'Bearer ' + os.environ['climatiq_key']
     }
 
-    res = requests.post('https://beta3.api.climatiq.io/travel/flights', headers=headers, data={'legs': computable_flights})
+    res = requests.post('https://beta3.api.climatiq.io/travel/flights', headers=headers, json={'legs': computable_flights})
+    data = res.json()
 
-    if res.status_code == '200':
+    if res.status_code == 200:
         # Add calculated co2 to remaining airports
-        for j, flight in enumerate(res.legs):
+        for j, flight in enumerate(data['legs']):
             airports[airport_indexes[j]].co2 = flight['co2e']
     else:
-        print('Failed to calculate co2 emission. Error: ')
-        print(res.text)
+        print('Failed to calculate co2 emission.')
+        print(f"Status code: {res.status_code}")
+        print(f"Error: {res.text}")
 
 
 # CLASSES
