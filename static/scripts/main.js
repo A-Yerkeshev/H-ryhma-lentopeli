@@ -46,7 +46,7 @@ async function main() {
 
     const markerCurr = L.marker([curr['lat'], curr['long']]).addTo(map);
     const markerDest = L.marker([dest['lat'], dest['long']]).addTo(map);
-    markerDest._icon.style.filter = "hue-rotate(120deg)";
+    markerDest._icon.style.filter = "hue-rotate(150deg)";
 }
 
 main();
@@ -87,6 +87,8 @@ function updateHeader(curr, turn, totalKm, totalCO2) {
 function updateAirportsList(airports) {
     airportsTag.innerHTML = '';
     const frag = new DocumentFragment;
+    let marker
+    let markersel = null
 
     Array.from(airports).forEach((airport) => {
         const li = document.createElement('li');
@@ -107,11 +109,19 @@ function updateAirportsList(airports) {
 
         li.addEventListener('mouseover', (event) => {
             marker = L.marker([airport['lat'], airport['long']]).addTo(map);
-            markerDest._icon.style.filter = "hue-rotate(240deg)"
+            marker._icon.style.filter = "hue-rotate(200deg)"
+        });
+
+        li.addEventListener('mouseout', (event) => {
+            marker.remove()
         });
 
         li.addEventListener('click', (event) => {
-
+            if (markersel !== null) {
+                markersel.remove();
+            }
+            markersel = L.marker([airport['lat'], airport['long']]).addTo(map);
+            markersel._icon.style.filter = "hue-rotate(250deg)"
         });
 
         li.append(name, country, direction, type);
