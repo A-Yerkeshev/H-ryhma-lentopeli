@@ -41,12 +41,17 @@ async function main() {
     updateHeader(curr, turn, totalKm, totalCO2);
     updateAirportsList(airports);
 
-    // Zoom to current location and add markers
+    // Add curr and dest markers
     map.panTo(([curr['lat'], curr['long']]));
 
     const markerCurr = L.marker([curr['lat'], curr['long']]).addTo(map);
     const markerDest = L.marker([dest['lat'], dest['long']]).addTo(map);
     markerDest._icon.style.filter = "hue-rotate(150deg)";
+
+    // Zoom to the current location on first list hover
+    airportsTag.addEventListener('mouseover', (event) => {
+        map.zoomIn(3);
+    }, {once : true});
 }
 
 main();
