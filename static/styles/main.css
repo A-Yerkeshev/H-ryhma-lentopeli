@@ -5,6 +5,7 @@
     --sandy-dark: #8b662e;
     --black: #211300;
     --white: #fffbf1;
+    --green: #1faa1a;
 }
 
 * { 
@@ -123,6 +124,11 @@ main {
     gap: 0.4rem;
     border-bottom: 1px solid var(--black);
     padding: 0.2rem 0.6rem 0;
+    cursor: pointer;
+}
+
+li.active {
+    box-shadow: 0 0 1px 3px var(--green);
 }
 
 #airports li span {

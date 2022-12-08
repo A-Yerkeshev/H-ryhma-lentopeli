@@ -85,9 +85,11 @@ function updateHeader(curr, turn, totalKm, totalCO2) {
 }
 
 function updateAirportsList(airports) {
-    airportsTag.innerHTML = '';
     const frag = new DocumentFragment;
+    const liItems = [];
     let marker, markersel;
+
+    airportsTag.innerHTML = '';
 
     Array.from(airports).forEach((airport) => {
         const li = document.createElement('li');
@@ -122,6 +124,13 @@ function updateAirportsList(airports) {
         });
 
         li.addEventListener('click', (event) => {
+            // Update active class
+            liItems.forEach((item) => {
+                item.classList.remove('active');
+            })
+            event.currentTarget.classList.add('active');
+
+            // Update marker
             if (markersel) {
                 markersel.remove();
             }
@@ -130,6 +139,7 @@ function updateAirportsList(airports) {
         });
 
         li.append(name, type, country, direction, dist, co2);
+        liItems.push(li);
         frag.append(li);
     });
 
