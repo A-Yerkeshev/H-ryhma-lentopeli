@@ -87,8 +87,7 @@ function updateHeader(curr, turn, totalKm, totalCO2) {
 function updateAirportsList(airports) {
     airportsTag.innerHTML = '';
     const frag = new DocumentFragment;
-    let marker
-    let markersel = null
+    let marker, markersel;
 
     Array.from(airports).forEach((airport) => {
         const li = document.createElement('li');
@@ -96,35 +95,41 @@ function updateAirportsList(airports) {
         const country = document.createElement('span');
         const direction = document.createElement('span');
         const type = document.createElement('span');
+        const dist = document.createElement('span');
+        const co2 = document.createElement('span');
 
         name.classList.add('airport-name');
+        type.classList.add('airport-type');
         country.classList.add('airport-country');
         direction.classList.add('airport-direction');
-        type.classList.add('airport-type');
+        dist.classList.add('airport-dist');
+        co2.classList.add('airport-co2');
 
         name.innerText = airport['airport_name'];
-        country.innerText = airport['country_name'];
-        direction.innerText = airport['direction'];
         type.innerText = airport['type'].split('_').join(' ');
+        country.innerText = 'in ' + airport['country_name'] + ',';
+        direction.innerText = 'in ' + airport['direction'] + ' direction,';
+        dist.innerText = String(Math.round(airport['distance'])) + ' km away.';
+        co2.innerText = 'co2: ' + String(Math.round(airport['co2']));
 
         li.addEventListener('mouseover', (event) => {
             marker = L.marker([airport['lat'], airport['long']]).addTo(map);
-            marker._icon.style.filter = "hue-rotate(200deg)"
+            marker._icon.style.filter = "hue-rotate(200deg)";
         });
 
         li.addEventListener('mouseout', (event) => {
-            marker.remove()
+            marker.remove();
         });
 
         li.addEventListener('click', (event) => {
-            if (markersel !== null) {
+            if (markersel) {
                 markersel.remove();
             }
             markersel = L.marker([airport['lat'], airport['long']]).addTo(map);
-            markersel._icon.style.filter = "hue-rotate(250deg)"
+            markersel._icon.style.filter = "hue-rotate(250deg)";
         });
 
-        li.append(name, country, direction, type);
+        li.append(name, type, country, direction, dist, co2);
         frag.append(li);
     });
 

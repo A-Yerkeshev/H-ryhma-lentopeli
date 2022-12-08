@@ -145,7 +145,7 @@ def fetch_available_airports(curr_lat, curr_long, type):
 def add_direction(airport):
     global curr
 
-    direction_names = ['North', 'North-East', 'East', 'South-East', 'South', 'South-West', 'West', 'North-West']
+    direction_names = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']
 
     # Calculate in which direction airport is located
     x = (math.cos(math.radians(airport.lat)) *
