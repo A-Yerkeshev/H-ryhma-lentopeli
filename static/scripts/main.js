@@ -8,6 +8,7 @@ const turnTag = document.getElementById('turn');
 const totalKmTag = document.getElementById('total-km');
 const totalCO2Tag = document.getElementById('total-co2');
 const airportsTag = document.getElementById('airports');
+const filtersTag = document.getElementById('filter-controls');
 
 const map = L.map('map').setView([0, 0], 2);
 
@@ -27,6 +28,8 @@ async function main() {
 
     destNameTag.innerText = dest['airport_name'];
     destCountryTag.innerText = dest['country_name'];
+
+    setUpFilters();
 
     // Fetch starting location, list of available airports, distance to destination,
     // current turn num, total km travelled and total co2 emitted
@@ -95,7 +98,10 @@ function updateAirportsList(airports) {
     let marker, markersel;
 
     // Empty airports list except for menu
-    airportsTag.getElementsByTagName('li');
+    const oldItems = airportsTag.getElementsByTagName('li');
+    for (let i=1; i<oldItems.length; i++) {
+        oldItems[i].remove();
+    }
 
     Array.from(airports).forEach((airport) => {
         const li = document.createElement('li');
@@ -150,5 +156,28 @@ function updateAirportsList(airports) {
     });
 
     airportsTag.append(frag);
+}
 
+function setUpFilters() {
+    const buttons = Array.from(filtersTag.getElementsByTagName('span'));
+
+    buttons.forEach((button) => {
+        button.addEventListener('click', (event) => {
+            // Clear data-order
+            buttons.forEach((b) => {
+                if (b !== button) {
+                    delete b.dataset.order;
+                }
+            });
+
+            // Set data-order
+            console.log(button.dataset.order);
+
+            if (button.dataset.order === 'desc') {
+                button.dataset.order = 'asc';
+            } else {
+                button.dataset.order = 'desc';
+            }
+        });
+    });
 }
