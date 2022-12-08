@@ -88,6 +88,10 @@ sub, sup {
 	line-height: 0;
 }
 
+button {
+    border: none;
+}
+
 /* Header */
 header {
     background-color: var(--white);
@@ -117,6 +121,7 @@ main {
     flex-grow: 1;
     overflow-y: scroll;
     height: 35rem;
+    padding: 0.2rem;
 }
 
 #airports li {
@@ -144,8 +149,11 @@ li.active {
     flex-basis: 34%;
 }
 
-/* Map */
+button {
+    background-color: var(--sandy-medium);
+}
 
+/* Map */
 #map {
     width: 35rem;
     height: 35rem;

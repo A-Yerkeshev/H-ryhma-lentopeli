@@ -170,6 +170,7 @@ def add_co2(airports):
     # One CO2 gram = 1km * 90gr/km
     for i, airport in enumerate(airports):
         if curr.iata_code == '' or airport.iata_code == '':
+            airport.airport_name += ' NOT COMPUTABLE'
             airport.co2 = airport.distance * 90
         else:
     # Otherwise, make a call to API to calculate it more precisely
