@@ -25,17 +25,16 @@
     </header>
     <main>
       <div id="map"></div>
-      <div>
-        <menu id="filter-controls">
-          <button id="name-filter">name</button>
-          <button id="type-filter">type</button>
-          <button id="country-filter">country</button>
-          <button id="direction-filter">direction</button>
-          <button id="dist-filter">distance</button>
-          <button id="co2-filter">co2</button>
-        </menu>
-        <ul id="airports"></ul>
-      </div>
+      <ul id="airports">
+        <li id="filter-controls">
+          <span id="name-filter" class="airport-name">name</span>
+          <span id="type-filter" class="airport-type">type</span>
+          <span id="country-filter" class="airport-country">country</span>
+          <span id="direction-filter" class="airport-direction">direction</span>
+          <span id="dist-filter" class="airport-dist">distance</span>
+          <span id="co2-filter" class="airport-co2">co2(gm)</span>
+        </li>
+      </ul>
     </main>
   <button id="submit">Submit</button>
   </body>
