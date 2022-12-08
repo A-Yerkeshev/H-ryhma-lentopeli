@@ -115,7 +115,7 @@ main {
     background-color: var(--white);
     flex-grow: 1;
     overflow-y: scroll;
-    height: 30rem;
+    height: 35rem;
 }
 
 #airports li {
@@ -125,7 +125,22 @@ main {
     padding: 0.2rem 0.6rem 0;
 }
 
+#airports li span {
+    flex-basis: 12%;
+}
+
+#airports li .airport-country,
+#airports li .airport-direction {
+    flex-basis: 15%;
+}
+
+#airports li .airport-name {
+    flex-basis: 34%;
+}
+
+/* Map */
+
 #map {
-    width: 46rem;
-    height: 30rem;
+    width: 35rem;
+    height: 35rem;
 }
