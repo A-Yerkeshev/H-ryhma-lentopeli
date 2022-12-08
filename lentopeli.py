@@ -171,7 +171,7 @@ def add_co2(airports):
     for i, airport in enumerate(airports):
         if curr.iata_code == '' or airport.iata_code == '':
             airport.airport_name += ' NOT COMPUTABLE'
-            airport.co2 = airport.distance * 90
+            airport.co2 = airport.distance * 250
         else:
     # Otherwise, make a call to API to calculate it more precisely
             computable_flights.append({
@@ -191,7 +191,7 @@ def add_co2(airports):
     if res.status_code == 200:
         # Add calculated co2 to remaining airports
         for j, flight in enumerate(data['legs']):
-            airports[airport_indexes[j]].co2 = flight['co2e']
+            airports[airport_indexes[j]].co2 = flight['co2e'] * 1000
     else:
         print('Failed to calculate co2 emission.')
         print(f"Status code: {res.status_code}")

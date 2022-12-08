@@ -8,6 +8,7 @@ const turnTag = document.getElementById('turn');
 const totalKmTag = document.getElementById('total-km');
 const totalCO2Tag = document.getElementById('total-co2');
 const airportsTag = document.getElementById('airports');
+const submitButton = document.getElementById('submit');
 
 const map = L.map('map').setView([0, 0], 2);
 
@@ -52,6 +53,19 @@ async function main() {
     airportsTag.addEventListener('mouseover', (event) => {
         map.zoomIn(3);
     }, {once : true});
+
+    submitButton.addEventListener('click', (event) => {
+        const li = document.getElementsByClassName('active')[0];
+        if (li) {
+            fetch('/move', {method: 'POST'}, li.dataset.ident)
+                .then((response) => {
+                        return response.json();
+                    })
+                    .catch((error) => {
+                        console.error(`Failed to fetch ${String(resource)}. Error: ${error.message}`);
+                    });
+        }
+    })
 }
 
 main();
@@ -118,6 +132,8 @@ function updateAirportsList(airports) {
         direction.innerText = 'in ' + airport['direction'] + ' direction,';
         dist.innerText = String(Math.round(airport['distance'])) + ' km away.';
         co2.innerText = 'co2: ' + String(Math.round(airport['co2']));
+
+        li.dataset.ident = airport['ident'];
 
         li.addEventListener('mouseover', (event) => {
             marker = L.marker([airport['lat'], airport['long']]).addTo(map);

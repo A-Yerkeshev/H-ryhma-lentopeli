@@ -153,6 +153,14 @@ button {
     background-color: var(--sandy-medium);
 }
 
+#submit {
+	font-size: 2rem;
+    background-color: var(--green);
+    padding: 1rem;
+    margin: auto;
+    display: block;
+}
+
 /* Map */
 #map {
     width: 35rem;
