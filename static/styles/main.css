@@ -126,7 +126,6 @@ main {
 
 #airports li {
     display: flex;
-    gap: 0.4rem;
     border-bottom: 1px solid var(--black);
     padding: 0.2rem 0.6rem 0;
     cursor: pointer;
@@ -137,7 +136,8 @@ li.active {
 }
 
 #airports li span {
-    flex-basis: 12%;
+    flex-basis: 10%;
+    flex-grow: 1;
 }
 
 #airports li .airport-country,
@@ -146,11 +146,12 @@ li.active {
 }
 
 #airports li .airport-name {
-    flex-basis: 34%;
+    flex-basis: 40%;
 }
 
-button {
+#filter-controls {
     background-color: var(--sandy-medium);
+    font-size: 1.1rem;
 }
 
 /* Map */

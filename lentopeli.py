@@ -145,7 +145,7 @@ def fetch_available_airports(curr_lat, curr_long, type):
 def add_direction(airport):
     global curr
 
-    direction_names = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']
+    direction_names = ['North', 'North-East', 'East', 'South-East', 'South', 'South-West', 'West', 'North-West']
 
     # Calculate in which direction airport is located
     x = (math.cos(math.radians(airport.lat)) *
@@ -171,7 +171,7 @@ def add_co2(airports):
     for i, airport in enumerate(airports):
         if curr.iata_code == '' or airport.iata_code == '':
             airport.airport_name += ' NOT COMPUTABLE'
-            airport.co2 = airport.distance * 90
+            airport.co2 = airport.distance * 180
         else:
     # Otherwise, make a call to API to calculate it more precisely
             computable_flights.append({

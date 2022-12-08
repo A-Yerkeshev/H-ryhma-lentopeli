@@ -94,7 +94,8 @@ function updateAirportsList(airports) {
     const liItems = [];
     let marker, markersel;
 
-    airportsTag.innerHTML = '';
+    // Empty airports list except for menu
+    airportsTag.getElementsByTagName('li');
 
     Array.from(airports).forEach((airport) => {
         const li = document.createElement('li');
@@ -114,10 +115,10 @@ function updateAirportsList(airports) {
 
         name.innerText = airport['airport_name'];
         type.innerText = airport['type'].split('_').join(' ');
-        country.innerText = 'in ' + airport['country_name'] + ',';
-        direction.innerText = 'in ' + airport['direction'] + ' direction,';
-        dist.innerText = String(Math.round(airport['distance'])) + ' km away.';
-        co2.innerText = 'co2: ' + String(Math.round(airport['co2']));
+        country.innerText = airport['country_name'];
+        direction.innerText = airport['direction'];
+        dist.innerText = String(Math.round(airport['distance'])) + ' km';
+        co2.innerText = Math.round(airport['co2']);
 
         li.addEventListener('mouseover', (event) => {
             marker = L.marker([airport['lat'], airport['long']]).addTo(map);
