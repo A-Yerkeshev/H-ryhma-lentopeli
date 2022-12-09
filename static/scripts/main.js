@@ -56,14 +56,38 @@ async function main() {
 
     submitButton.addEventListener('click', (event) => {
         const li = document.getElementsByClassName('active')[0];
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': "application/json"
+            },
+            body: JSON.stringify(li.dataset.ident)
+        }
+
         if (li) {
-            fetch('/move', {method: 'POST'}, li.dataset.ident)
+            fetch('/move', options)
                 .then((response) => {
-                        return response.json();
-                    })
-                    .catch((error) => {
-                        console.error(`Failed to fetch ${String(resource)}. Error: ${error.message}`);
-                    });
+                    if (response.status == 200) {
+                        return fetchTimes('current', 3, 'current data');
+                    }
+                    else {
+                        throw new Error({message: 'Responded with status code: ' + response.status});
+                    }
+                })
+                .then((currentData) => {
+                    if (!currentData || Object.keys(currentData).length === 0) { return; }
+
+                    console.log('Current data:');
+                    console.dir(currentData);
+
+                    let {'current': curr, airports, dist, turn, 'total_km': totalKm,'total_co2': totalCO2} = currentData;
+
+                    updateHeader(curr, turn, totalKm, totalCO2);
+                    updateAirportsList(airports);
+                })
+                .catch((error) => {
+                    console.error(`Failed to make a move. Error: ${error.message}`);
+                });
         }
     })
 }
