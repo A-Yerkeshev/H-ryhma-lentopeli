@@ -150,10 +150,10 @@ li.active {
     flex-basis: 40%;
 }
 
-#filter-controls {
+/* #filter-controls {
     background-color: var(--sandy-medium);
     font-size: 1.1rem;
-}
+} */
 
 /* Map */
 #map {

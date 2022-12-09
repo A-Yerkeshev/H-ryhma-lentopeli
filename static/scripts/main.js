@@ -12,6 +12,12 @@ const filtersTag = document.getElementById('filter-controls');
 const submitButton = document.getElementById('submit');
 
 const map = L.map('map').setView([0, 0], 2);
+const mapMarkers = {
+    'curr': null,
+    'dest': null,
+    'sel': null,
+    'tmp': null
+}
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
@@ -45,9 +51,9 @@ async function main() {
     updateAirportsList(airports);
 
     // Add curr and dest markers
-    let markerCurr = updateCurrent(curr['lat'], curr['long']);
-    const markerDest = L.marker([dest['lat'], dest['long']]).addTo(map);
-    markerDest._icon.style.filter = "hue-rotate(150deg)";
+    mapMarkers['curr'] = updateCurrent(curr['lat'], curr['long']);
+    mapMarkers['dest'] = L.marker([dest['lat'], dest['long']]).addTo(map);
+    mapMarkers['dest']._icon.style.filter = "hue-rotate(150deg)";
 
     // Zoom to the current location on first list hover
     airportsTag.addEventListener('mouseover', (event) => {
@@ -71,11 +77,14 @@ async function main() {
                         return fetchTimes('current', 3, 'current data');
                     }
                     else {
-                        throw new Error({message: 'Responded with status code: ' + response.status});
+                        return response.json();
                     }
                 })
                 .then((currentData) => {
                     if (!currentData || Object.keys(currentData).length === 0) { return; }
+                    if (currentData['error']) {
+                        throw new Error(currentData['error']);
+                    }
 
                     console.log('Current data:');
                     console.dir(currentData);
@@ -84,10 +93,14 @@ async function main() {
 
                     updateHeader(curr, turn, totalKm, totalCO2);
                     updateAirportsList(airports);
+                    mapMarkers['curr'] = updateCurrent(curr['lat'], curr['long'], mapMarkers['curr']);
                 })
                 .catch((error) => {
+                    console.dir(error);
                     console.error(`Failed to make a move. Error: ${error.message}`);
                 });
+        } else {
+            console.log('Airport is not selected!');
         }
     })
 }
@@ -123,20 +136,18 @@ function updateHeader(curr, turn, totalKm, totalCO2) {
     currNameTag.innerText = curr['airport_name'];
     currCountryTag.innerText = curr['country_name'];
     turnTag.innerText = `Turn: ${turn}`;
-    totalKmTag.innerText = `Total km travelled: ${totalKm}`;
-    totalCO2Tag.innerText = `Total CO2 emitted: ${totalCO2}`;
+    totalKmTag.innerText = `Total km travelled: ${Math.round(totalKm)} km`;
+    totalCO2Tag.innerText = `Total CO2 emitted: ${Math.round(totalCO2)} gm`;
 }
 
 function updateAirportsList(airports) {
     const frag = new DocumentFragment;
     const liItems = [];
-    let marker, markersel;
 
-    // Empty airports list except for menu
-    const oldItems = airportsTag.getElementsByTagName('li');
-    for (let i=1; i<oldItems.length; i++) {
-        oldItems[i].remove();
-    }
+    airportsTag.innerHTML = '';
+
+    if (mapMarkers['sel']) { mapMarkers['sel'].remove(); }
+    if (mapMarkers['tmp']) { mapMarkers['tmp'].remove(); }
 
     airports.forEach((airport) => {
         const li = document.createElement('li');
@@ -164,12 +175,12 @@ function updateAirportsList(airports) {
         li.dataset.ident = airport['ident'];
 
         li.addEventListener('mouseover', (event) => {
-            marker = L.marker([airport['lat'], airport['long']]).addTo(map);
-            marker._icon.style.filter = "hue-rotate(200deg)";
+            mapMarkers['tmp'] = L.marker([airport['lat'], airport['long']]).addTo(map);
+            mapMarkers['tmp']._icon.style.filter = "hue-rotate(200deg)";
         });
 
         li.addEventListener('mouseout', (event) => {
-            marker.remove();
+            mapMarkers['tmp'].remove();
         });
 
         li.addEventListener('click', (event) => {
@@ -180,11 +191,11 @@ function updateAirportsList(airports) {
             event.currentTarget.classList.add('active');
 
             // Update marker
-            if (markersel) {
-                markersel.remove();
+            if (mapMarkers['sel']) {
+                mapMarkers['sel'].remove();
             }
-            markersel = L.marker([airport['lat'], airport['long']]).addTo(map);
-            markersel._icon.style.filter = "hue-rotate(250deg)";
+            mapMarkers['sel'] = L.marker([airport['lat'], airport['long']]).addTo(map);
+            mapMarkers['sel']._icon.style.filter = "hue-rotate(250deg)";
         });
 
         li.append(name, type, country, direction, dist, co2);

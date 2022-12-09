@@ -96,7 +96,7 @@ def move():
     if success == True:
         return Response(status=200)
     else:
-        return Response(status=400)
+        return Response(json.dumps({'error': f"{ident} ident is not valid"}), status=400)
 
 # FUNCTIONS
 def generate_random_location():
