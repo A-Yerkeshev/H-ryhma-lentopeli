@@ -30,8 +30,6 @@ async function main() {
     destNameTag.innerText = dest['airport_name'];
     destCountryTag.innerText = dest['country_name'];
 
-    setUpFilters();
-
     // Fetch starting location, list of available airports, distance to destination,
     // current turn num, total km travelled and total co2 emitted
     const currentData = await fetchTimes('current', 3, 'current data');
@@ -43,6 +41,7 @@ async function main() {
     let {'current': curr, airports, dist, turn, 'total_km': totalKm,'total_co2': totalCO2} = currentData;
 
     updateHeader(curr, turn, totalKm, totalCO2);
+    // setUpFilters(airports);
     updateAirportsList(airports);
 
     // Add curr and dest markers
@@ -117,7 +116,7 @@ function updateAirportsList(airports) {
         oldItems[i].remove();
     }
 
-    Array.from(airports).forEach((airport) => {
+    airports.forEach((airport) => {
         const li = document.createElement('li');
         const name = document.createElement('span');
         const country = document.createElement('span');
@@ -174,26 +173,55 @@ function updateAirportsList(airports) {
     airportsTag.append(frag);
 }
 
-function setUpFilters() {
-    const buttons = Array.from(filtersTag.getElementsByTagName('span'));
+// function setUpFilters(airports) {
+//     const buttons = Array.from(filtersTag.getElementsByTagName('span'));
 
-    buttons.forEach((button) => {
-        button.addEventListener('click', (event) => {
-            // Clear data-order
-            buttons.forEach((b) => {
-                if (b !== button) {
-                    delete b.dataset.order;
-                }
-            });
+//     buttons.forEach((button) => {
+//         button.addEventListener('click', (event) => {
+//             // Clear data-order
+//             buttons.forEach((b) => {
+//                 if (b !== button) {
+//                     delete b.dataset.order;
+//                 }
+//             });
 
-            // Set data-order
-            console.log(button.dataset.order);
+//             // Set data-order and sort
+//             if (button.dataset.order === 'asc') {
+//                 button.dataset.order = 'desc';
 
-            if (button.dataset.order === 'desc') {
-                button.dataset.order = 'asc';
-            } else {
-                button.dataset.order = 'desc';
-            }
-        });
-    });
-}
+//                 sortAirports(airports, 'name', 'desc');
+//                 updateAirportsList(airports);
+//             } else {
+//                 button.dataset.order = 'asc';
+
+//                 sortAirports(airports, 'name', 'asc');
+//                 updateAirportsList(airports);
+                
+//             }
+//         });
+//     });
+// }
+
+// function sortAirports(airports, by, order) {
+//     switch (by) {
+//         case 'name':
+//             airports.sort((a1, a2) => {
+//                 if (order === 'asc') {
+//                     return a1['airport_name'].localeCompare(a2['airport_name']);
+//                 } else if (order === 'desc') {
+//                     return a2['airport_name'].localeCompare(a1['airport_name']);
+//                 }
+//             });
+//             break;
+//         case 'country':
+//             break;
+//         case 'type':
+//             break;
+//         case 'direction':
+//             break;
+//         case 'distance':
+//             break;
+//         case 'co2':
+//             break;
+//     }
+// }
