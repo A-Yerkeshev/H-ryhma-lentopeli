@@ -5,7 +5,7 @@ import time
 import json
 import jsonpickle
 import requests
-from flask import Flask, send_file
+from flask import Flask, send_file, request, Response
 from geopy import distance
 from dotenv import load_dotenv
 
@@ -79,6 +79,24 @@ def send_current():
                 'turn': turns_total, 'total_km': km_total, 'total_co2': co2_total}
     return jsonpickle.encode(currdata)
 
+
+@app.route("/move", methods=['POST'])
+def move():
+    global airports, curr, turns_total, km_total, co2_total
+    ident = request.get_json()
+    success = False
+
+    for airport in airports:
+        if airport.ident == str(ident):
+            curr = airport
+            turns_total += 1
+            km_total += airport.distance
+            co2_total += airport.co2
+            success = True
+    if success == True:
+        return Response(status=200)
+    else:
+        return Response(status=400)
 
 # FUNCTIONS
 def generate_random_location():
