@@ -45,9 +45,7 @@ async function main() {
     updateAirportsList(airports);
 
     // Add curr and dest markers
-    map.panTo(([curr['lat'], curr['long']]));
-
-    const markerCurr = L.marker([curr['lat'], curr['long']]).addTo(map);
+    let markerCurr = updateCurrent(curr['lat'], curr['long']);
     const markerDest = L.marker([dest['lat'], dest['long']]).addTo(map);
     markerDest._icon.style.filter = "hue-rotate(150deg)";
 
@@ -171,6 +169,16 @@ function updateAirportsList(airports) {
     });
 
     airportsTag.append(frag);
+}
+
+function updateCurrent(lat, long, marker) {
+    if (marker) {
+        marker.remove();
+    }
+
+    map.panTo([lat, long]);
+
+    return L.marker([lat, long]).addTo(map);
 }
 
 // function setUpFilters(airports) {

@@ -181,3 +181,7 @@ footer {
     text-shadow: 0 0 5px var(--sandy-dark);
     cursor: pointer;
 }
+
+#submit:active {
+    filter: hue-rotate(250deg);
+}
