@@ -120,7 +120,7 @@ main {
     background-color: var(--white);
     flex-grow: 1;
     overflow-y: scroll;
-    height: 35rem;
+    height: 30rem;
     padding: 0.2rem;
 }
 
@@ -155,16 +155,29 @@ li.active {
     font-size: 1.1rem;
 }
 
-#submit {
-	font-size: 2rem;
-    background-color: var(--green);
-    padding: 1rem;
-    margin: auto;
-    display: block;
-}
-
 /* Map */
 #map {
     width: 35rem;
-    height: 35rem;
+    height: 30rem;
+}
+
+/* Footer */
+footer {
+    background-color: var(--sandy-light);
+    overflow: auto;
+    padding: 0.5rem;
+}
+
+#submit {
+	font-size: 2rem;
+    background-color: var(--green);
+    color: white;
+    padding: 1rem;
+    margin: auto;
+    display: block;
+    float: right;
+    font-weight: 600;
+    border: 3px solid var(--sandy-dark);
+    text-shadow: 0 0 5px var(--sandy-dark);
+    cursor: pointer;
 }
