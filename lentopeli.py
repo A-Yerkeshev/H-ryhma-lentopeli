@@ -148,15 +148,25 @@ def fetch_available_airports(curr_lat, curr_long, type):
     else:
         raise Exception(f"Airport type '{type}' is invalid.")
 
-    # Select all airports within the reach of current location, based on airport type
-    # Distance = 3963.0 * arccos[(sin(lat1) * sin(lat2)) + cos(lat1) * cos(lat2) * cos(long2 – long1)] * 1.609344
-    sql = f"""SELECT ident, airport.name, country.name, type, latitude_deg, longitude_deg, iata_code FROM airport, country
-    WHERE 3963.0 * acos((sin(RADIANS({curr_lat})) * sin(RADIANS(latitude_deg))) +
-    cos(RADIANS({curr_lat})) * cos(RADIANS(latitude_deg)) *
-    cos(RADIANS(longitude_deg) - RADIANS({curr_long}))) * 1.609344 <= {radius_km}
-    AND type != 'closed'
-    AND ident != '{curr.ident}'
-    AND country.iso_country = airport.iso_country;"""
+    if dist > radius_km:
+        # Select all airports within the reach of current location, based on airport type
+        # Distance = 3963.0 * arccos[(sin(lat1) * sin(lat2)) + cos(lat1) * cos(lat2) * cos(long2 – long1)] * 1.609344
+        sql = f"""SELECT ident, airport.name, country.name, type, latitude_deg, longitude_deg, iata_code FROM airport, country
+        WHERE 3963.0 * acos((sin(RADIANS({curr_lat})) * sin(RADIANS(latitude_deg))) +
+        cos(RADIANS({curr_lat})) * cos(RADIANS(latitude_deg)) *
+        cos(RADIANS(longitude_deg) - RADIANS({curr_long}))) * 1.609344 <= {radius_km}
+        AND type != 'closed'
+        AND ident != '{curr.ident}'
+        AND country.iso_country = airport.iso_country
+        LIMIT 500;"""
+    else:
+        sql = f"""SELECT ident, airport.name, country.name, type, latitude_deg, longitude_deg, iata_code FROM airport, country
+        WHERE 3963.0 * acos((sin(RADIANS({curr_lat})) * sin(RADIANS(latitude_deg))) +
+        cos(RADIANS({curr_lat})) * cos(RADIANS(latitude_deg)) *
+        cos(RADIANS(longitude_deg) - RADIANS({curr_long}))) * 1.609344 <= {radius_km}
+        AND type != 'closed'
+        AND ident != '{curr.ident}'
+        AND country.iso_country = airport.iso_country;"""
     cursor = connection.cursor()
     cursor.execute(sql)
     db_result = cursor.fetchall()
