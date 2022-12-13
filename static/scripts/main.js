@@ -55,7 +55,7 @@ async function main() {
 
     updateHeader(curr, turn, totalKm, totalCO2);
     // setUpFilters(airports);
-    updateAirportsList(airports);
+    updateAirportsList(curr, airports);
 
     // Add curr and dest markers
     mapMarkers['curr'] = updateCurrent(curr['lat'], curr['long']);
@@ -106,7 +106,7 @@ async function main() {
                     }
 
                     updateHeader(curr, turn, totalKm, totalCO2);
-                    updateAirportsList(airports);
+                    updateAirportsList(curr, airports);
                     mapMarkers['curr'] = updateCurrent(curr['lat'], curr['long'], mapMarkers['curr']);
                 })
                 .catch((error) => {
@@ -154,7 +154,7 @@ function updateHeader(curr, turn, totalKm, totalCO2) {
     totalCO2Tag.innerText = `Total CO2 emitted: ${Math.round(totalCO2)} gm`;
 }
 
-function updateAirportsList(airports) {
+function updateAirportsList(curr, airports) {
     const frag = new DocumentFragment;
     const liItems = [];
 
@@ -178,6 +178,10 @@ function updateAirportsList(airports) {
         direction.classList.add('airport-direction');
         dist.classList.add('airport-dist');
         co2.classList.add('airport-co2');
+
+        if (curr['ident'] === airport['ident']) {
+            li.classList.add('dest');
+        }
 
         name.innerText = airport['airport_name'];
         type.innerText = airport['type'].split('_').join(' ');
