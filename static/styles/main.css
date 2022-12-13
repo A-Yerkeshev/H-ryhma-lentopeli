@@ -120,11 +120,11 @@ main {
     background-color: var(--white);
     flex-grow: 1;
     overflow-y: scroll;
-    height: 30rem;
+    height: 28.5rem;
     padding: 0.2rem;
 }
 
-#airports li {
+li {
     display: flex;
     border-bottom: 1px solid var(--black);
     padding: 0.2rem 0.6rem 0;
@@ -136,24 +136,24 @@ li.active {
     box-shadow: 0 0 1px 3px var(--green);
 }
 
-#airports li span {
+li span {
     flex-basis: 10%;
     flex-grow: 1;
 }
 
-#airports li .airport-country,
-#airports li .airport-direction {
+li .airport-country,
+li .airport-direction {
     flex-basis: 15%;
 }
 
-#airports li .airport-name {
+li .airport-name {
     flex-basis: 40%;
 }
 
-/* #filter-controls {
+#filter-controls {
     background-color: var(--sandy-medium);
     font-size: 1.1rem;
-} */
+}
 
 /* Map */
 #map {
