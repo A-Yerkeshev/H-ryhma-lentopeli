@@ -194,13 +194,9 @@ def add_co2(airports):
     computable_flights = []
     airport_indexes = []
 
-    # If either of airports has no iata_code - calculate co2 according to formula:
-    # One CO2 gram = 1km * 90gr/km
+    # If both airports have iata code, make a call to API to calculate co2
     for i, airport in enumerate(airports):
-        if curr.iata_code == '' or airport.iata_code == '':
-            airport.co2 = airport.distance * 220
-        else:
-    # Otherwise, make a call to API to calculate it more precisely
+        if curr.iata_code and airport.iata_code: 
             computable_flights.append({
                 'from': curr.iata_code,
                 'to': airport.iata_code
@@ -223,6 +219,12 @@ def add_co2(airports):
         print('Failed to calculate co2 emission.')
         print(f"Status code: {res.status_code}")
         print(f"Error: {res.text}")
+
+    # Calculate CO2 emission for remaining airports according to average formula:
+    # One CO2 gram = 1km * 220gr/km
+    for airport in airports:
+        if not hasattr(airport, 'co2'):
+            airport.co2 = airport.distance * 220
 
 def reset_variables():
     global curr, dest, dist, km_total, co2_total, turns_total
