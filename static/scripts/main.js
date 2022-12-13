@@ -9,6 +9,8 @@ const totalKmTag = document.getElementById('total-km');
 const totalCO2Tag = document.getElementById('total-co2');
 const airportsTag = document.getElementById('airports');
 const filtersTag = document.getElementById('filter-controls');
+const rulesButton = document.getElementById('showRules');
+const rules = document.getElementById('rules');
 const submitButton = document.getElementById('submit');
 
 const map = L.map('map').setView([0, 0], 2);
@@ -24,6 +26,10 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
+
+showRules.addEventListener('click', (event) => {
+    rules.showModal();
+});
 
 async function main() {
     // Fetch final destination

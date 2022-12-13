@@ -118,6 +118,19 @@ header {
     border-bottom: 1rem solid var(--sandy-dark);
 }
 
+#showRules {
+    font-weight: 500;
+    font-size: 1.3rem;
+    background-color: var(--green);
+    color: white;
+    border: 2px solid var(--sandy-dark);
+}
+
+#closeBtn {
+    font-size: 1.2rem;
+    border: 2px solid var(--sandy-dark);
+}
+
 .curr-info {
     display: block;
     float: right;

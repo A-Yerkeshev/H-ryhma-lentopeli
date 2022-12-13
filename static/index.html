@@ -17,11 +17,22 @@
   </head>
   <body>
     <header>
+      <dialog id="rules">
+        <form method="dialog">
+          <p>Welcome to Group H's flight game!<br><br>
+          Your goal is to reach the destination airport.<br>
+          Select an airport to fly to from the list and
+          then press the Fly button to fly there.<br><br>
+          Good luck.</p>
+          <button id="closeBtn">Close</button>
+        </form>
+      </dialog>
       <h1>Currently at <b id="curr-name"></b> in <b id="curr-country"></b></h1>
       <h2>Destination is <b id="dest-name"></b> in <b id="dest-country"></b></h2>
       <span id="turn" class="curr-info"></span>
       <span id="total-km" class="curr-info"></span>
       <span id="total-co2" class="curr-info"></span>
+      <p><button id="showRules">Rules</button></p>
     </header>
     <main>
       <div id="map"></div>
