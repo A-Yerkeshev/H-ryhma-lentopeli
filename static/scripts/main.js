@@ -18,6 +18,7 @@ const mapMarkers = {
     'sel': null,
     'tmp': null
 }
+let dest;
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
@@ -26,7 +27,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 async function main() {
     // Fetch final destination
-    const dest = await fetchTimes('dest', 3, 'destination');
+    dest = await fetchTimes('dest', 3, 'destination');
     // If after 3 tries dest is undefined - abort the game
     if (!dest) { return; }
 
@@ -73,6 +74,7 @@ async function main() {
         if (li) {
             fetch('/move', options)
                 .then((response) => {
+                    // If move succeded - fetch new data
                     if (response.status == 200) {
                         return fetchTimes('current', 3, 'current data');
                     }
@@ -81,6 +83,7 @@ async function main() {
                     }
                 })
                 .then((currentData) => {
+                    // Validate new data
                     if (!currentData || Object.keys(currentData).length === 0) { return; }
                     if (currentData['error']) {
                         throw new Error(currentData['error']);
@@ -90,6 +93,11 @@ async function main() {
                     console.dir(currentData);
 
                     let {'current': curr, airports, dist, turn, 'total_km': totalKm,'total_co2': totalCO2} = currentData;
+
+                    // Check if player has arrived
+                    if (curr['ident'] === dest['ident']) {
+                        window.location.href = '/success';
+                    }
 
                     updateHeader(curr, turn, totalKm, totalCO2);
                     updateAirportsList(airports);

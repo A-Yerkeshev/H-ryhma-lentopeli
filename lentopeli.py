@@ -5,7 +5,7 @@ import time
 import json
 import jsonpickle
 import requests
-from flask import Flask, send_file, request, Response
+from flask import Flask, send_file, request, Response, render_template
 from geopy import distance
 from dotenv import load_dotenv
 
@@ -93,10 +93,18 @@ def move():
             km_total += airport.distance
             co2_total += airport.co2
             success = True
+
     if success == True:
         return Response(status=200)
     else:
         return Response(json.dumps({'error': f"{ident} ident is not valid"}), status=400)
+
+@app.route("/success")
+def success():
+    return render_template('success.html', dest=dest.airport_name,
+                                            turn=turns_total,
+                                            km_total=round(km_total),
+                                            co2_total=round(co2_total))
 
 # FUNCTIONS
 def generate_random_location():
