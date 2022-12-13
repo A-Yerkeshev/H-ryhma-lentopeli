@@ -1,4 +1,21 @@
 /* Settings */
+@font-face {
+    font-family: Kulim-Park;
+    src: url(fonts/Kulim_Park/KulimPark-Regular.ttf);
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: Kulim-Park;
+    src: url(fonts/Kulim_Park/KulimPark-Bold.ttf);
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: Londrina-shadow;
+    src: url(fonts/Londrina_Shadow/LondrinaShadow-Regular.ttf);
+}
+
 :root {
     --sandy-light: #fceacf;
     --sandy-medium: #e2c08d;
@@ -19,6 +36,7 @@ html, body {
     font-size: 15px;
     margin: 0;
     padding: 0;
+    font-family: Kulim-Park, Verdana, sans-serif;
 }
 	
 body {
