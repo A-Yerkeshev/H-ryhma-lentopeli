@@ -198,3 +198,14 @@ footer {
 #submit:active {
     filter: hue-rotate(250deg);
 }
+
+/* Success page */
+#success {
+    background-color: var(--sandy-light);
+}
+
+.caps {
+    font-size: 4rem;
+    font-weight: 600;
+    text-align: center;
+}
