@@ -179,7 +179,7 @@ function updateAirportsList(curr, airports) {
         dist.classList.add('airport-dist');
         co2.classList.add('airport-co2');
 
-        if (curr['ident'] === airport['ident']) {
+        if (dest['ident'] === airport['ident']) {
             li.classList.add('dest');
         }
 

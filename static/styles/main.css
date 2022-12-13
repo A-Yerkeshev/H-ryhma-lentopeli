@@ -166,6 +166,10 @@ li {
     gap: 0.2rem;
 }
 
+li.dest {
+    box-shadow: 0 0 1px 3px red;
+}
+
 li.active {
     box-shadow: 0 0 1px 3px var(--green);
 }
@@ -187,10 +191,6 @@ li .airport-name {
 #filter-controls {
     background-color: var(--sandy-medium);
     font-size: 1.1rem;
-}
-
-li.dest {
-    box-shadow: 0 0 1px 3px red;
 }
 
 /* Map */
