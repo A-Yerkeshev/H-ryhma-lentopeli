@@ -45,6 +45,8 @@ dist_by_type = {
 @app.route("/")
 def init():
     global curr, dest, dist
+    reset_variables()
+
     curr = generate_random_location()
     dest = generate_random_location()
     dist = get_distance(curr.lat, curr.long, dest.lat, dest.long)
@@ -221,6 +223,15 @@ def add_co2(airports):
         print('Failed to calculate co2 emission.')
         print(f"Status code: {res.status_code}")
         print(f"Error: {res.text}")
+
+def reset_variables():
+    global curr, dest, dist, km_total, co2_total, turns_total
+    curr = None
+    dest = None
+    dist = 0
+    turns_total = 0
+    km_total = 0
+    co2_total = 0
 
 
 # CLASSES
