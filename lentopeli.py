@@ -159,7 +159,7 @@ def fetch_available_airports(curr_lat, curr_long, type):
         AND country.iso_country = airport.iso_country"""
 
     if dist > radius_km:
-        sql += "ORDER by RAND () LIMIT 500;"      
+        sql += " ORDER by RAND () LIMIT 500;"      
     else:
         sql += ';'
     cursor = connection.cursor()
