@@ -23,7 +23,7 @@ const mapMarkers = {
 let dest;
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 3,
+    maxZoom: 5,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
@@ -64,7 +64,7 @@ async function main() {
 
     // Zoom to the current location on first list hover
     airportsTag.addEventListener('mouseover', (event) => {
-        map.zoomIn(3);
+        map.zoomIn(1);
     }, {once : true});
 
     submitButton.addEventListener('click', (event) => {
